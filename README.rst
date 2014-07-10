@@ -32,6 +32,7 @@ Example
 -------
 
 .. code-block:: python
+
     >>> from zanox import PublisherApi
     >>> api = PublisherApi(connect_id=XXXXX, secret_key=XXXXX)
     >>> example1 = api.get('programs')
