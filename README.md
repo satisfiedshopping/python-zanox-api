@@ -13,7 +13,7 @@ Features
 
 Dependencies
 ============
-- requiests
+- requests
 - beautifulsoup
 
 Installation
