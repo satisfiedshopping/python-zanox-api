@@ -9,8 +9,8 @@ Publisher API - https://developer.zanox.com/web/guest/publisher-api-2011
 Features
 --------
 
- - Easy to use wrapper
- - Generate tracking url for deeplinks
+- Easy to use wrapper
+- Generate tracking url for deeplinks
 
 
 Dependencies
