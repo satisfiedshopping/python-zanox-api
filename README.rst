@@ -38,7 +38,7 @@ Example
     >>> example1 = api.get('programs')
     >>> example2 = api.get('programs', start_date='2012-01-01')
     >>> example3 = api.get('programs/program/1234')
-    >>> example3 = api.get_tracking_url('http://www.zanox.com', adspace=XXXXX)
+    >>> example4 = api.get_tracking_url('http://www.example.com/foo/bar.html', adspace=XXXXX)
     ...
 
 
