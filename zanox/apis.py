@@ -96,10 +96,10 @@ class PublisherApi(object):
         json = response.json()
         return json
 
-    def get_program_identifier(self, url):
-        return url.split('&ulp')[0].split('ppc/?')[1]
+    def get_program_identifier(self, tracking_url):
+        return tracking_url.lower().split('&ulp')[0].split('ppc/?')[1]
 
-    def get_tracking_url(self, url, adspace):
+    def get_tracking_url(self, destination_url, adspace):
         """Get a tracking url for a given destination url and adspace id"""
 
         # authenticate
@@ -115,7 +115,7 @@ class PublisherApi(object):
         # submit deeplink form and extract the tracking url
         deeplink_form_data = {
             'network': 'zanox',
-            'url': url,
+            'url': destination_url,
             'zanox_adspaces': adspace,
         }
         response = self.session.post('http://toolbox.zanox.com/deeplink/', data=deeplink_form_data)
