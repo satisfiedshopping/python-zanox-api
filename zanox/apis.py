@@ -49,8 +49,7 @@ class PublisherApi(object):
             url = '?'.join((url, urlencode(parameters)))
         return url
 
-    @staticmethod
-    def extract_uri_from_url(url):
+    def extract_uri_from_url(self, url):
         url_parts = urlparse(url)
         uri = url_parts.path.split(self.version)[-1]
         return uri
