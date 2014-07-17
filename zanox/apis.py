@@ -49,10 +49,21 @@ class PublisherApi(object):
             url = '?'.join((url, urlencode(parameters)))
         return url
 
-    def extract_uri_from_url(self, url):
+    @staticmethod
+    def extract_uri_from_url(url):
         url_parts = urlparse(url)
         uri = url_parts.path.split(self.version)[-1]
         return uri
+
+    @staticmethod
+    def extract_destination_url_from_tracking_url(tracking_url, clean=False):
+        response = requests.head(tracking_url, allow_redirects=True)
+        if clean:
+            url_parts = urlparse(response.url)
+            destination_url = '{0}://{1}{2}'.format(url_parts.scheme, url_parts.netloc, url_parts.path)
+        else:
+            destination_url = response.url
+        return destination_url
 
     def get_signature(self, url, method, date, nonce):
         # construct signature
@@ -80,7 +91,8 @@ class PublisherApi(object):
         }
         return headers
 
-    def get_page_numbers(self, json):
+    @staticmethod
+    def get_page_numbers(json):
         number_of_pages = int(json['total'] / json['items'])
         page_numbers = range(number_of_pages)
         return page_numbers
