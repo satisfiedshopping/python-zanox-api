@@ -101,7 +101,6 @@ class PublisherApi(object):
 
     def get(self, resource, **parameters):
         url = self.construct_url(resource, **parameters)
-        print "GET {0}".format(url)
         headers = self.get_request_headers(url, method='GET')
         response = requests.get(url, headers=headers)
         json = response.json()
