@@ -17,7 +17,7 @@ Dependencies
 ------------
 
 - requests
-- beautifulsoup
+- xmltodict
 
 
 Installation
