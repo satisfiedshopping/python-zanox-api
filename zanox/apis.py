@@ -12,6 +12,7 @@ from urlparse import urlparse
 from urllib import urlencode
 
 import requests
+import xmltodict
 
 
 def random_string(length, characters=string.ascii_uppercase + string.ascii_lowercase + string.digits):
@@ -112,8 +113,8 @@ class PublisherApi(object):
     def get_tracking_url(self, destination_url, adspace_id):
         """Get a tracking url for a given destination url and adspace id"""
         deeplink_api_url = '{0}://toolbox.zanox.com/tools/api/deeplink?connectid={1}&adspaceid={2}&url={3}'.format(self.protocol, self.connect_id, adspace_id, destination_url)
-        response = request.get(deeplink_api_url)
-        tracking_url = xmltodict.parse(response.text())['deeplink']['url']
+        response = requests.get(deeplink_api_url)
+        tracking_url = xmltodict.parse(response.text)['deeplink']['url']
         return tracking_url
 
     def put(self, content, path, query=None):
