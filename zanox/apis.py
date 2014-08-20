@@ -110,32 +110,11 @@ class PublisherApi(object):
     def get_program_identifier(self, tracking_url):
         return tracking_url.lower().split('&ulp')[0].split('ppc/?')[1]
 
-    def get_tracking_url(self, destination_url, adspace):
+    def get_tracking_url(self, destination_url, adspace_id):
         """Get a tracking url for a given destination url and adspace id"""
-
-        # authenticate
-        if not self.session:
-            self.session = requests.session()
-            login_form_data = {
-                'loginForm.loginViaUserAndPassword': True,
-                'loginForm.userName': self.username,
-                'loginForm.password': self.password,
-            }
-            self.session.post('https://auth.zanox.com/connect/login?appid=A5B83584B42A666E5309', data=login_form_data)
-
-        # submit deeplink form and extract the tracking url
-        deeplink_form_data = {
-            'network': 'zanox',
-            'url': destination_url,
-            'zanox_adspaces': adspace,
-        }
-        response = self.session.post('http://toolbox.zanox.com/deeplink/', data=deeplink_form_data)
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(response.content)
-        try:
-            tracking_url = soup.find(id='result_url')['value']
-        except:
-            return None
+        deeplink_api_url = '{0}://toolbox.zanox.com/tools/api/deeplink?connectid={1}&adspaceid={2}&url={3}'.format(self.scheme, self.connect_id, adspace_id, destination_url)
+        response = request.get(deeplink_api_url)
+        tracking_url = xmltodict.parse(response.text())['deeplink']['url']
         return tracking_url
 
     def put(self, content, path, query=None):
