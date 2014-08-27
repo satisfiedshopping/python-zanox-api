@@ -31,6 +31,7 @@ class PublisherApi(object):
         self.session = None
         self.user_agent = user_agent or "PythonZanoxApi/{0}".format(__version__)
         self.from_email = from_email
+        self.tracking_url_format = 'http://ad.zanox.com/ppc/?{tracking_id}&ULP=[[{destination}]]&zpar9=[[{connect_id}]]'
 
         # Go through keyword arguments, and either save their values to the instance
         for key, value in kwargs.iteritems():
@@ -129,12 +130,28 @@ class PublisherApi(object):
     def get_program_identifier(self, tracking_url):
         return tracking_url.lower().split('&ulp')[0].split('ppc/?')[1]
 
-    def get_tracking_url(self, destination_url, adspace_id):
+    def get_tracking_url(self, destination_url, adspace_id=None, tracking_id=None, use_deeplink_generator=True):
         """Get a tracking url for a given destination url and adspace id"""
-        deeplink_api_url = '{0}://toolbox.zanox.com/tools/api/deeplink?connectid={1}&adspaceid={2}&url={3}'.format(self.protocol, self.connect_id, adspace_id, destination_url)
-        headers = self.get_default_headers()
-        response = requests.get(deeplink_api_url, headers=headers)
-        tracking_url = xmltodict.parse(response.text)['deeplink']['url']
+
+        if use_deeplink_generator:
+            # Generate the link with de API
+            if not adspace_id:
+                raise Exception("`adspace_id` is required when you use the deeplink generator")
+            deeplink_api_url = '{0}://toolbox.zanox.com/tools/api/deeplink?connectid={1}&adspaceid={2}&url={3}'.format(self.protocol, self.connect_id, adspace_id, destination_url)
+            headers = self.get_default_headers()
+            response = requests.get(deeplink_api_url, headers=headers)
+            print response.text
+            tracking_url = xmltodict.parse(response.text)['deeplink']['url']
+        else:
+            # Generate the link with the given trakcing url format
+            if not tracking_id:
+                raise Exception("`tracking_id` is required when you use the deeplink generator")
+            tracking_url_parameters = {
+                'tracking_id': tracking_id,
+                'connect_id': self.connect_id,
+                'destination': destination_url
+            }
+            tracking_url = self.tracking_url_format.format(**tracking_url_parameters)
         return tracking_url
 
     def put(self, content, path, query=None):
