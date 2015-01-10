@@ -19,12 +19,12 @@ import xmltodict
 
 class PublisherApi(object):
 
-    def __init__(self, connect_id, secret_key, domain='api.zanox.com', format='json', version='2011-03-01', ssl=True, user_agent=None, from_email=None, *args, **kwargs):
+    def __init__(self, connect_id, secret_key, hostname='api.zanox.com', format='json', version='2011-03-01', ssl=True, user_agent=None, from_email=None, *args, **kwargs):
         self.connect_id = connect_id
         self.secret_key = secret_key
         self.ssl = ssl
         self.protocol = 'https' if self.ssl else 'http'
-        self.domain = domain
+        self.hostname = hostname
         self.version = version
         self.format = format
         self.datetime_format = '%a, %d %b %Y %H:%M:%S GMT' # example: Thu, 15 Aug 2013 15:56:07 GMT
@@ -41,12 +41,12 @@ class PublisherApi(object):
         # construct url
         url_kwargs = {
             'protocol': self.protocol,
-            'domain': self.domain,
+            'hostname': self.hostname,
             'format': format or self.format,
             'version': self.version,
             'resource': resource.strip('/'),
         }
-        url = '{protocol}://{domain}/{format}/{version}/{resource}'.format(**url_kwargs)
+        url = '{protocol}://{hostname}/{format}/{version}/{resource}'.format(**url_kwargs)
         if parameters:
             url = '?'.join((url, urlencode(parameters)))
         return url

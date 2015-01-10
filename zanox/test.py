@@ -41,11 +41,20 @@ class ExtractDestinationUrlTest(unittest.TestCase):
         self.assertEqual(self.api.extract_destination_url_from_tracking_url(tracking_url, clean=True), destination_url)
 
 
+class GenerateTrackingUrlTest(unittest.TestCase):
 
+    def setUp(self):
+        self.api = PublisherApi(connect_id='802B8BF4AE99EBE00F41', secret_key='fa4c0c2020Aa4c+ab9Ea0ec8d39E06/df2c5aa44')
 
+    def test_use_deeplink_api(self):
+        tracking_url = 'http://ad.zanox.com/ppv/?25739309C31436867&amp;ULP=[[http://www.bullsandbirds.com/schoen-louis03-camel-7354-p-3035.html]]&amp;zpar9=[[802B8BF4AE99EBE00F41]]'
+        destination_url = 'http://www.bullsandbirds.com/schoen-louis03-camel-7354-p-3035.html'
+        self.assertEqual(self.api.get_tracking_url(destination_url, adspace_id='897026'), tracking_url)
 
-
-
+    def test_generate_with_format(self):
+        tracking_url = 'http://ad.zanox.com/ppc/?25695976C44878398&ULP=[[http://www.hardloopschoenencenter.nl/product/434398/nike-storm-slim-waistpack.html]]&zpar9=[[802B8BF4AE99EBE00F41]]'
+        destination_url = 'http://www.hardloopschoenencenter.nl/product/434398/nike-storm-slim-waistpack.html'
+        self.assertEqual(self.api.get_tracking_url(destination_url, merchant_id='25695976C44878398', url_type='ppc', use_deeplink_generator=False), tracking_url)
 
 
 

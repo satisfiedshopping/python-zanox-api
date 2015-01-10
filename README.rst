@@ -44,8 +44,8 @@ Example
 Parameters
 ----------
 
-- **connect_id** Zanox Connect ID (mandatory)
-- **secret_key** Zanox Secret Key (mandatory)
+- **connect_id** Zanox Connect ID (required)
+- **secret_key** Zanox Secret Key (required)
 - **domain** default: api.zanox.com
 - **format** default: json
 - **version** default: 2011-03-01
